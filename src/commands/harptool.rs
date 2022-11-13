@@ -24,13 +24,21 @@ pub fn run(options: &[CommandDataOption]) -> String {
         String::from("richter")
     };
 
+    let scale = if let Some(item) = options.iter().find(|o| o.name == "scale") {
+        match &item.resolved {
+            Some(CommandDataOptionValue::String(scale)) => Some(scale),
+            _ => None,
+        }
+    } else {
+        None
+    };
 
     harptool::export(
         &tuning,
         "C",
         None,
         &Setup {
-            scale: None,
+            scale: scale.map(|x| &**x),
             position,
         },
         true,
@@ -77,5 +85,33 @@ pub fn register(
                 .add_string_choice("easy 3rd", "easy 3rd")
                 .add_string_choice("4 hole richter", "4 hole richter")
                 .add_string_choice("5 hole richter", "5 hole richter")
+        })
+        .create_option(|option| {
+            option
+                .name("scale")
+                .description("scale to highlight")
+                .kind(CommandOptionType::String)
+                .add_string_choice("ionian", "ionian")
+                .add_string_choice("major", "major")
+                .add_string_choice("dorian", "dorian")
+                .add_string_choice("phrygian", "phrygian")
+                .add_string_choice("mixolydian", "mixolydian")
+                .add_string_choice("lydian", "lydian")
+                .add_string_choice("aeolian", "aeolian")
+                .add_string_choice("minor", "minor")
+                .add_string_choice("natural minor", "natural minor")
+                .add_string_choice("locrian", "locrian")
+                .add_string_choice("major pentatonic", "major pentatonic")
+                .add_string_choice("minor pentatonic", "minor pentatonic")
+                .add_string_choice("blues", "blues")
+                .add_string_choice("minor blues", "minor blues")
+                .add_string_choice("major blues", "major blues")
+                .add_string_choice("harmonic minor", "harmonic minor")
+                .add_string_choice("melodic minor", "melodic minor")
+                .add_string_choice("phrygian dominant", "phrygian dominant")
+                .add_string_choice("double harmonic", "double harmonic")
+                .add_string_choice("arabic", "arabic")
+                .add_string_choice("lydian dominant", "lydian dominant")
+                .add_string_choice("acoustic", "acoustic")
         })
 }
