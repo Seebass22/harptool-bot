@@ -16,16 +16,20 @@ impl EventHandler for Handler {
         if let Interaction::ApplicationCommand(command) = interaction {
             println!("Received command interaction: {:#?}", command);
 
-            let content = match command.data.name.as_str() {
+            let filename = match command.data.name.as_str() {
                 "harptool" => commands::harptool::run(&command.data.options),
                 _ => "not implemented :(".to_string(),
             };
+
+            let filename = std::path::PathBuf::from(filename);
 
             if let Err(why) = command
                 .create_interaction_response(&ctx.http, |response| {
                     response
                         .kind(InteractionResponseType::ChannelMessageWithSource)
-                        .interaction_response_data(|message| message.content(content))
+                        .interaction_response_data(|message| {
+                            message.content("").add_file(&filename)
+                        })
                 })
                 .await
             {
@@ -44,9 +48,8 @@ impl EventHandler for Handler {
                 .expect("GUILD_ID must be an integer"),
         );
 
-        let commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
-            commands
-                .create_application_command(|command| commands::harptool::register(command))
+        let _commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
+            commands.create_application_command(|command| commands::harptool::register(command))
         })
         .await;
     }
