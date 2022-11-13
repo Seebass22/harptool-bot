@@ -57,25 +57,6 @@ pub fn register(
         })
         .create_option(|option| {
             option
-                .name("key")
-                .description("key of harmonica")
-                .kind(CommandOptionType::String)
-                .add_string_choice("C", "C")
-                .add_string_choice("G", "G")
-                .add_string_choice("D", "D")
-                .add_string_choice("A", "A")
-                .add_string_choice("E", "E")
-                .add_string_choice("B", "B")
-                .add_string_choice("F#", "F#")
-                .add_string_choice("Db", "Db")
-                .add_string_choice("Ab", "Ab")
-                .add_string_choice("Eb", "Eb")
-                .add_string_choice("Bb", "Bb")
-                .add_string_choice("F", "F")
-                .required(false)
-        })
-        .create_option(|option| {
-            option
                 .name("tuning")
                 .description("tuning of harmonica")
                 .kind(CommandOptionType::String)
@@ -96,12 +77,5 @@ pub fn register(
                 .add_string_choice("easy 3rd", "easy 3rd")
                 .add_string_choice("4 hole richter", "4 hole richter")
                 .add_string_choice("5 hole richter", "5 hole richter")
-        })
-        .create_option(|option| {
-            option
-                .name("use_degrees")
-                .description("print scale degrees")
-                .kind(CommandOptionType::Boolean)
-                .required(false)
         })
 }
