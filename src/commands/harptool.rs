@@ -6,8 +6,8 @@ use serenity::model::prelude::interaction::application_command::{
 };
 
 pub fn run(options: &[CommandDataOption]) -> String {
-    let position = if let Some(index) = options.iter().position(|o| o.name == "position") {
-        match options[index].resolved {
+    let position = if let Some(item) = options.iter().find(|o| o.name == "position") {
+        match item.resolved {
             Some(CommandDataOptionValue::Integer(p)) => p as usize,
             _ => 1,
         }
@@ -15,8 +15,8 @@ pub fn run(options: &[CommandDataOption]) -> String {
         1
     };
 
-    let tuning = if let Some(index) = options.iter().position(|o| o.name == "tuning") {
-        match &options[index].resolved {
+    let tuning = if let Some(item) = options.iter().find(|o| o.name == "tuning") {
+        match &item.resolved {
             Some(CommandDataOptionValue::String(tuning)) => tuning.clone(),
             _ => String::from("richter"),
         }
