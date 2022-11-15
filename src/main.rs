@@ -5,7 +5,6 @@ use std::env;
 use serenity::async_trait;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
-use serenity::model::id::GuildId;
 use serenity::prelude::*;
 
 struct Handler;
@@ -41,17 +40,23 @@ impl EventHandler for Handler {
     async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
 
+        use serenity::model::id::GuildId;
         let guild_id = GuildId(
             env::var("GUILD_ID")
                 .expect("Expected GUILD_ID in environment")
                 .parse()
                 .expect("GUILD_ID must be an integer"),
         );
-
-        let _commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
+        let _ = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
             commands.create_application_command(|command| commands::harptool::register(command))
         })
         .await;
+
+        // use serenity::model::application::command::Command;
+        // let _ = Command::create_global_application_command(&ctx.http, |command| {
+        //     commands::harptool::register(command)
+        // })
+        // .await;
     }
 }
 
