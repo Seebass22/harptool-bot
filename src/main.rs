@@ -13,8 +13,6 @@ struct Handler;
 impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
-            println!("Received command interaction: {:#?}", command);
-
             let filename = match command.data.name.as_str() {
                 "harptool" => commands::harptool::run(&command.data.options),
                 _ => "not implemented :(".to_string(),
